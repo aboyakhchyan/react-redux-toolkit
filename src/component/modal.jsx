@@ -7,21 +7,22 @@ export const Modal = ({ onClose }) => {
 
   const {id} = useParams()
   
-
   const [text, setText] = useState('')
   const [star, setStar] = useState(1) 
 
   const dispatch = useDispatch()
-  console.log(star)
+  
   return (
     <>
       <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-content" onClick={evt => evt.stopPropagation()}>
           <form onSubmit={evt => {
             evt.preventDefault()
-            dispatch(addComment({text: text, rate: +star, book: id}))
-            setText('')
-            setStar(1)
+            if(text.trim()) {
+              dispatch(addComment({text: text, rate: star, book: id}))
+              setText('')
+              setStar(1)
+            }
           }}>
 
             <input 
@@ -30,7 +31,8 @@ export const Modal = ({ onClose }) => {
                 value={text}
                 onChange={evt => setText(evt.target.value)}
             />
-            <select value={star} onChange={evt => setStar(evt.target.value)}>
+
+            <select value={star} onChange={evt => setStar(+evt.target.value)}>
               <option>1</option>
               <option>2</option>
               <option>3</option>
